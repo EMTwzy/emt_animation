@@ -1,7 +1,7 @@
 <template>
     <div id="Navigation">
         <div class="Navigation_content">
-                <div class="emt">Emilia Maji Tenshi</div>
+            <div class="emt">Emilia Maji Tenshi</div>
             <input type="text" placeholder="愿精灵保佑你~" id="Search">
         </div>
     </div>
@@ -19,15 +19,18 @@ export default {
     width: 100%;
     height: 0.8rem;
     color: white;
+    background: rgb(26, 0, 26);
 }
+
 /**     设置导航栏内部        */
-.Navigation_content{
+.Navigation_content {
     width: 75%;
     height: 0.8rem;
     margin: 0 auto;
     position: relative;
 }
-.emt{
+
+.emt {
     width: 5rem;
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.4rem;
