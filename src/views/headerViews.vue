@@ -47,7 +47,7 @@ export default {
         width: 6rem;
         height: 6rem;
         border-radius: 50%;
-        margin-left: 26rem;
+        margin-left: 25rem;
     }
 }
 

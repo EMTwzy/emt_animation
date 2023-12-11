@@ -57,3 +57,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 >>>>>>> 84d56de9b5987a42f7b75f6beafdf19b82c518aa
+node_modules
