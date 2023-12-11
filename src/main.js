@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {createApp} from 'vue'
 import App from './App.vue'
 //引入router，以及router配置文件
@@ -23,3 +24,22 @@ app.config.productionTip = false;
 
 
 app.mount('#app');
+=======
+import Vue from 'vue'
+import App from './App.vue'
+//引入路由
+import UseRouter from 'vue-router';
+//引入路由器
+import index from './router/router';
+
+
+
+
+Vue.config.productionTip = false
+//使用路由
+Vue.use(UseRouter);
+new Vue({
+  render: h => h(App),
+  router:index,
+}).$mount('#app')
+>>>>>>> 84d56de9b5987a42f7b75f6beafdf19b82c518aa
