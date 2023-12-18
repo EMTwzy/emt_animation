@@ -3,7 +3,9 @@
         <!-- 莉亚 -->
         <img src="../assets/emilia.png" id="emilia">
         <!-- 网站主题 -->
-        <h3>EMT</h3>
+        <router-link to="/home" style="text-decoration:none">
+            <h3>EMT</h3>
+        </router-link>
         <!-- 个人 -->
         <img src="../assets/default_user.jpeg" alt="user" id="user">
     </div>

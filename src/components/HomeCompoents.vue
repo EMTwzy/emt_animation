@@ -13,6 +13,7 @@
         <div class="randomVideo">
             <div class="randomTitle">
                 <h3>随机推荐
+                    <!-- <router-link class="more" :to="'/all'">查看更多</router-link> -->
                     <span @click="more" class="more">查看更多</span>
                 </h3>
             </div>
@@ -46,14 +47,14 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, inject } from 'vue';
 import axios from 'axios';
 
 export default {
     name: 'homeCompoents',
     setup() {
         const input = ref('');    //获取输入框输入数据
-
+        const router = inject('router'); // 注入全局的路由实例
         const randomVideo = reactive([{
             vid: 0,//作品编号
             vname: '',//作品名称
@@ -84,6 +85,7 @@ export default {
         }]);
         // 挂载完成后
         onMounted(() => {
+            
             //随机推荐
             axios.get("http://localhost:8080/randomVideo").then((response) => {
                 randomVideo.length = 0; // 清空数组，以便重新填充
@@ -115,8 +117,11 @@ export default {
 
         })
 
-        function more() {
+       
+        const more = function () {
             console.log("点击了查看更多");
+             router.push({ name: 'All' });
+
         }
         const handleError = () => {
             randomVideo.forEach((item, index) => {
@@ -193,7 +198,7 @@ export default {
         margin-top: 1rem;
         width: 80%;
         background: rgba(00, 00, 00, 0.7);
-        
+
         .random_content {
             display: flex;
             flex-wrap: wrap;
@@ -212,6 +217,7 @@ export default {
             color: red;
             font-style: italic;
             float: right;
+            cursor: pointer;
         }
     }
 
@@ -235,4 +241,5 @@ export default {
         }
     }
 
-}</style>
+}
+</style>

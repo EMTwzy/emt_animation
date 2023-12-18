@@ -11,6 +11,7 @@ import 'element-plus/dist/index.css';
 const app = createApp(App);
 // 使用路由
 app.use(routerConfigure);
+app.provide('router', routerConfigure); // 提供全局的路由实例
 // 使用element-ui
 app.use(ElementUI);
 
