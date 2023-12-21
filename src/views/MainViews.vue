@@ -13,7 +13,7 @@
 
 <script>
 
-import Header from '../views/headerViews';
+import Header from '../components/headerComponents';
 
 
 export default {

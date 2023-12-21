@@ -3,9 +3,11 @@
         <!-- 莉亚 -->
         <img src="../assets/emilia.png" id="emilia">
         <!-- 网站主题 -->
-        <router-link to="/home" style="text-decoration:none">
-            <h3>EMT</h3>
-        </router-link>
+        
+            <h3>
+                <router-link to="/home" style="text-decoration:none">EMT</router-link>
+            </h3>
+        
         <!-- 个人 -->
         <img src="../assets/default_user.jpeg" alt="user" id="user">
     </div>
@@ -25,7 +27,7 @@ export default {
     height: 7rem;
     background-color:rgba(202, 140, 202, 0.5);
     margin-top: 4rem;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
     display: flex;
     flex: auto;
     justify-items: center;

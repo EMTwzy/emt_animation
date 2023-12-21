@@ -1,7 +1,11 @@
 <template>
     <div class="home">
         <!-- 查询 -->
-        <el-input v-model="input" placeholder="找一部好番看看吧~" class="search"></el-input>
+        <!-- <el-input v-model="input" placeholder="找一部好番看看吧~" class="search"></el-input> -->
+        <div style="width:100%;text-align:center">
+             <inputSearch></inputSearch>
+        </div>
+       
         <!-- 今日更新 -->
         <div class="today">
             <h3>今日更新</h3>
@@ -47,13 +51,14 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, inject } from 'vue';
+import { reactive, onMounted, inject } from 'vue';
 import axios from 'axios';
-
+import inputSearch from '@/components/inputSearch.vue';
 export default {
     name: 'homeCompoents',
+    components:{inputSearch},
     setup() {
-        const input = ref('');    //获取输入框输入数据
+        
         const router = inject('router'); // 注入全局的路由实例
         const randomVideo = reactive([{
             vid: 0,//作品编号
@@ -120,7 +125,7 @@ export default {
        
         const more = function () {
             console.log("点击了查看更多");
-             router.push({ name: 'All' });
+             router.push('/all');
 
         }
         const handleError = () => {
@@ -132,7 +137,6 @@ export default {
 
 
         return {
-            input,
             randomVideo,
             reZero,
             more,
@@ -152,7 +156,6 @@ export default {
     align-items: center;
     overflow: auto;
 
-    /*添加滑轮效果*/
     /*搜索框*/
     .search {
         width: 30%;
