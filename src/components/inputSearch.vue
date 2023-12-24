@@ -18,9 +18,17 @@ export default {
     const router = inject('router'); // 注入全局的路由实例
     const input =ref('');
     
+    
 
     function search() {
-      store.commit('setInput',input);
+      console.log("启动了函数");
+      //store.commit('setInput',input);
+      sessionStorage.setItem('input',JSON.stringify(input.value));
+      console.log(router.currentRoute.value.path);
+      let now=router.currentRoute.value.path;
+      if(now=='/search'){
+        router.go(0);
+      }else
       router.push('/search');
     }
 

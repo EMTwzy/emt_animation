@@ -7,7 +7,7 @@ import routerConfigure from '../src/router/router';
 import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
 //引入vuex
-import vuex from './vuex';
+import {vuex} from './vuex';
 import store from '../src/vuex/index';
 
 const app = createApp(App);
@@ -21,6 +21,7 @@ app.use(vuex);
 app.provide('store',store);
 
 // 防止路由原地跳转导致出错
+
 const originalPush = routerConfigure.push;
 routerConfigure.push = function push(location) {
     return originalPush.call(this, location).catch(err => err);
