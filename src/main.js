@@ -7,7 +7,7 @@ import routerConfigure from '../src/router/router';
 import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
 //引入vuex
-import {vuex} from './vuex';
+import {vuex} from 'vuex';
 import store from '../src/vuex/index';
 
 const app = createApp(App);

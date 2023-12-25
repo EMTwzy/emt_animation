@@ -3,21 +3,35 @@
         <!-- 查询 -->
         <!-- <el-input v-model="input" placeholder="找一部好番看看吧~" class="search"></el-input> -->
         <div style="width:100%;text-align:center">
-             <inputSearch></inputSearch>
+            <inputSearch></inputSearch>
         </div>
-       
+
         <!-- 今日更新 -->
         <div class="today">
             <h3>今日更新</h3>
-            <div class="today_content">
+            <div class="week">
+                    <div v-for="v in inintWeek" :key="v" class="weekNum" @click="selectWeek(v)" :class="{'active':v===activeName}">
+                        {{ v }}
+                    </div>
+                </div>
 
+            <div class="today_content">
+                <div v-for="v in weekVideo" :key="v.vid" class="video-item">
+                    <div class="pic">
+                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0">
+                        <img src="../assets/load.jpg" v-else-if="!v.vpic.length > 0 || v.vpic == null" alt="封面">
+                        <p style="width:9rem">{{ v.vname }}</p>
+                        <p>{{ v.vnote }}</p>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- 随机推荐 -->
         <div class="randomVideo">
             <div class="randomTitle">
-                <h3>随机推荐
-                    <!-- <router-link class="more" :to="'/all'">查看更多</router-link> -->
+                <h3>
+                    <span style="margin-left:5rem">随机推荐</span>
+                    
                     <span @click="more" class="more">查看更多</span>
                 </h3>
             </div>
@@ -51,43 +65,38 @@
 </template>
 
 <script>
-import { reactive, onMounted, inject } from 'vue';
+import { reactive, onMounted, inject, ref } from 'vue';
 import axios from 'axios';
 import inputSearch from '@/components/inputSearch.vue';
 export default {
     name: 'homeCompoents',
-    components:{inputSearch},
+    components: { inputSearch },
     setup() {
+        let day = new Date();
         
+        const inintWeek=reactive(["星期一","星期二","星期三","星期四","星期五","星期六","星期日"]);
+        const activeName = ref(inintWeek[day.getDay()]);             //默认展示今天的番剧
+
         const router = inject('router'); // 注入全局的路由实例
-        const randomVideo = reactive([{
-            vid: 0,//作品编号
-            vname: '',//作品名称
-            vstate: 0,//作品状态（集数）
-            vpic: '',//作品封面
-            vactor: '',//声优
-            vpublishyear: 0,//上映时间（年份）
-            vpublisharea: '',//上映地区（制作国）
-            vaddtime: '',//添加时间（时间戳）
-            vnote: '',//更新状态
-            vletter: '',//作品开头字母
-            vdirector: '',//制作人
-            vlang: '',//语种（作品语类）
-        }]);
-        const reZero = reactive([{
-            vid: 0,//作品编号
-            vname: '',//作品名称
-            vstate: 0,//作品状态（集数）
-            vpic: '',//作品封面
-            vactor: '',//声优
-            vpublishyear: 0,//上映时间（年份）
-            vpublisharea: '',//上映地区（制作国）
-            vaddtime: '',//添加时间（时间戳）
-            vnote: '',//更新状态
-            vletter: '',//作品开头字母
-            vdirector: '',//制作人
-            vlang: '',//语种（作品语类）
-        }]);
+        function initObject() {
+            return reactive([{
+                vid: 0,//作品编号
+                vname: '',//作品名称
+                vstate: 0,//作品状态（集数）
+                vpic: '',//作品封面
+                vactor: '',//声优
+                vpublishyear: 0,//上映时间（年份）
+                vpublisharea: '',//上映地区（制作国）
+                vaddtime: '',//添加时间（时间戳）
+                vnote: '',//更新状态
+                vletter: '',//作品开头字母
+                vdirector: '',//制作人
+                vlang: '',//语种（作品语类）
+            }]);
+        }
+        const weekVideo = initObject();
+        const randomVideo = initObject();
+        const reZero = initObject();
         // 挂载完成后
         onMounted(() => {
             
@@ -119,13 +128,45 @@ export default {
                     reZero.push(...response.data);
                 }
             })
-
+            newDay();
+            console.log("111111",inintWeek.indexOf(activeName.value));
+            console.log("22222",activeName);
         })
 
-       
+        //每周更新榜单
+        function newDay(){
+            axios.get("http://localhost:8080/weekNew", {
+                params: {
+                    day: (inintWeek.indexOf(activeName.value))+1
+                }
+            }).then((response) => {
+                if (response.data != null) {
+                    weekVideo.length = 0;
+                    weekVideo.push(...response.data);
+                    weekVideo.forEach((item) => {
+                        axios.get("http://localhost:8080/picUtils", {
+                            params: {
+                                vpic: item.vpic
+                            }
+                        }).then((response) => {
+                            if (!response.data)
+                                item.vpic = ''
+                        })
+                    })
+                }
+            })
+        }
+        //选择星期数
+        function selectWeek(day){
+            activeName.value=day;
+            newDay();     //显示指定星期的番剧数据
+            console.log(day);
+        }
+
+        // 查看更多  分类大全 
         const more = function () {
             console.log("点击了查看更多");
-             router.push('/all');
+            router.push('/all');
 
         }
         const handleError = () => {
@@ -137,9 +178,9 @@ export default {
 
 
         return {
-            randomVideo,
-            reZero,
-            more,
+            activeName,inintWeek,
+            randomVideo, reZero, weekVideo,
+            more, newDay,selectWeek,
             handleError
         }
     }
@@ -166,17 +207,42 @@ export default {
 
     /*今日更新*/
     .today {
-        height: 5rem;
         width: 80%;
         background: rgba(00, 00, 00, 0.7);
-        display: flex;
-        flex: auto;
-        justify-items: center;
-        align-items: center;
+        
 
         h3 {
             color: white;
             margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+        .week{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+            .weekNum{
+                color: #fff;
+                padding:0.5rem ;
+                margin-right: 0.1rem;
+                cursor: pointer;
+                border: 0.1rem solid #ffffff;
+                border-radius: 20%;
+            }
+            .weekNum:hover{
+                background-color: rgba(204, 113, 234, 0.389);
+            }
+            .active{
+                border: none;
+                border-radius: none;
+                color: red;
+            }
+        }
+        .today_content{
+            display: flex;
+            flex-wrap: wrap;
+            color: #fff;
         }
     }
 
