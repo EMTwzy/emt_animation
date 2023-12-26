@@ -4,6 +4,7 @@ import main from '../views/MainViews';
 import home from '../views/HomeViews';
 import all from '../views/AllViews';
 import search from '../views/searchViews.vue';
+import play from '../views/PlayViews.vue';
 
 //Vue 3 中，Vue Router 默认使用的是 HTML5 历史记录模式（history mode），这种模式下，URL 中不再带有哈希 '#'，
 const Router = createRouter({
@@ -19,6 +20,7 @@ const Router = createRouter({
                 {path: '/home', component: home},
                 {path:'/all',component:all},
                 {path:'/search',component:search},
+                {path:'/play',component:play},
             ],
         }
     ]

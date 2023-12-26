@@ -7,7 +7,7 @@ import routerConfigure from '../src/router/router';
 import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
 //引入vuex
-import {vuex} from 'vuex';
+// import {vuex} from 'vuex';
 import store from '../src/vuex/index';
 
 const app = createApp(App);
@@ -17,7 +17,7 @@ app.provide('router', routerConfigure); // 提供全局的路由实例
 // 使用element-ui
 app.use(ElementUI);
 //使用vuex
-app.use(vuex);
+//app.use(vuex);
 app.provide('store',store);
 
 // 防止路由原地跳转导致出错

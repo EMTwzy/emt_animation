@@ -3,12 +3,12 @@
         <!-- 头部 -->
         <!-- 莉亚图、网站名称、搜索框、个人 -->
         <Header></Header>
-        <!-- 搜索框 -->
-        <!-- <inputSearch></inputSearch> -->
         <!-- 内容部 -->
-        <!-- 今日更新 、随机推荐（每一个专题都有跳转到全部分类的功能）-->
         <router-view >
         </router-view>
+        <!-- 尾部 -->
+        <!-- 免责声明哒 -->
+        <Footer></Footer>
 
     </div>
 </template>
@@ -16,11 +16,11 @@
 <script>
 
 import Header from '../components/headerComponents';
-
+import Footer from '@/components/footerComponents.vue';
 
 export default {
     name: 'MainCompoents',
-    components:{Header},
+    components:{Header,Footer},
     setup() {
 
     }

@@ -18,10 +18,10 @@
             <div class="today_content">
                 <div v-for="v in weekVideo" :key="v.vid" class="video-item">
                     <div class="pic">
-                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0">
-                        <img src="../assets/load.jpg" v-else-if="!v.vpic.length > 0 || v.vpic == null" alt="封面">
-                        <p style="width:9rem">{{ v.vname }}</p>
-                        <p>{{ v.vnote }}</p>
+                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
+                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
+                        <p style="margin:0 auto">{{ v.vnote }}</p>
                     </div>
                 </div>
             </div>
@@ -39,10 +39,10 @@
             <div class="random_content">
                 <div v-for="v in randomVideo" :key="v.vid" class="video-item">
                     <div class="pic">
-                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0">
-                        <img src="../assets/load.jpg" v-else-if="!v.vpic.length > 0 || v.vpic == null" alt="封面">
-                        <p style="width:9rem">{{ v.vname }}</p>
-                        <p>{{ v.vnote }}</p>
+                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
+                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
+                        <p style="margin:0 auto">{{ v.vnote }}</p>
                     </div>
                 </div>
             </div>
@@ -53,12 +53,12 @@
             <div class="reThem">
                 <div v-for="v in reZero" :key="v.vid" class="video-item">
                     <div class="pic">
-                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0">
-                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面">
-                        <p style="width:9rem">{{ v.vname }}</p>
-                        <p>{{ v.vnote }}</p>
+                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
+                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
+                        <p style="margin:0 auto">{{ v.vnote }}</p>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
     </div>
@@ -68,6 +68,7 @@
 import { reactive, onMounted, inject, ref } from 'vue';
 import axios from 'axios';
 import inputSearch from '@/components/inputSearch.vue';
+
 export default {
     name: 'homeCompoents',
     components: { inputSearch },
@@ -110,7 +111,7 @@ export default {
                         params: {
                             vpic: item.vpic
                         }
-                    }).then((response) => {
+                    },setTimeout(5000)).then((response) => {
                         console.log("test@@@@", response.data);
                         if (!response.data)
                             item.vpic = '';
@@ -122,7 +123,7 @@ export default {
                 params: {
                     name: '从零开始的异世界生活'
                 }
-            }).then((response) => {
+            },setTimeout(5000)).then((response) => {
                 if (response.data != null) {
                     reZero.length = 0;
                     reZero.push(...response.data);
@@ -176,11 +177,16 @@ export default {
             });
         }
 
+        //前往播放界面
+        function toPlay(id){
+            localStorage.setItem('playId',id);
+            router.push('/play');
+        }
 
         return {
             activeName,inintWeek,
             randomVideo, reZero, weekVideo,
-            more, newDay,selectWeek,
+            more, newDay,selectWeek,toPlay,
             handleError
         }
     }
