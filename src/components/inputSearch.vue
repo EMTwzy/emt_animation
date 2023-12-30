@@ -1,7 +1,7 @@
 <template>
   <div class="inputSearch">
     <!-- 查询 -->
-    <el-input v-model="input" placeholder="找一部好番看看吧~" class="search" @keyup.enter="search" style="width:30%">
+    <el-input v-model="input" placeholder="找一部好番看看吧~" class="search" @keyup.enter="search" :style="inintWidth">
 
     </el-input>
   </div>
@@ -13,6 +13,12 @@ import { useStore } from 'vuex';
 
 export default {
   name: 'inputSearch',
+  props:{
+    inintWidth:{
+      type:String,
+      default:'width:30%',
+    }
+  },
   setup() {
     const store = useStore();
     const router = inject('router'); // 注入全局的路由实例

@@ -7,28 +7,29 @@
     <div class="result">
       <div v-for="v in videoData" :key="v.vid" class="video_item">
         <div class="pic">
-          <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0">
-          <img src="../assets/load.jpg" v-else-if="(v.vpic.length === 0 || v.vpic === '') && input.value" alt="封面">
-          <p style="width:9rem;margin:0 auto">{{ v.vname }}</p>
-          <p>{{ v.vnote }}</p>
+          <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
+          <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
+          <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
+          <p style="margin:0 auto">{{ v.vnote }}</p>
         </div>
       </div>
-      <h3 style="text-align:center;margin-top:1rem;color:red;width:100%" v-if="videoData.length>1">到此为止了</h3>
+      <h3 style="text-align:center;margin-top:1rem;color:red;width:100%" v-if="videoData.length > 1">到此为止了</h3>
     </div>
   </div>
 </template>
 
 <script>
 import { useStore } from 'vuex';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref ,inject} from 'vue';
 import axios from 'axios';
 import inputSearch from '@/components/inputSearch.vue';
 
 export default {
   name: 'searchViews',
-  components:{inputSearch},
+  components: { inputSearch },
   setup() {
     const store = useStore();
+    const router=inject('router');
     const input = ref(JSON.parse(sessionStorage.getItem('input')));          //输入框传来的数据
 
     const videoData = reactive([{           //视频数据
@@ -54,10 +55,10 @@ export default {
           }
         }).then((response) => {
           if (response.data != '' && response.data != null) {
-            let total=response.data.length;
-            
-            input.value = input.value + "搜索结果为(共"+total+"条结果):";
-            videoData.length=0;                 //置空数据组的内容
+            let total = response.data.length;
+
+            input.value = input.value + "搜索结果为(共" + total + "条结果):";
+            videoData.length = 0;                 //置空数据组的内容
             videoData.push(...response.data);
 
             videoData.forEach((item) => {
@@ -76,10 +77,16 @@ export default {
         input.value = '未输入内容或查询出错';
     })
 
+    //前往播放界面
+    function toPlay(id) {
+      localStorage.setItem('playId', id);
+      router.push('/play');
+    }
+
     return {
       input,
       videoData,
-
+      toPlay
     }
   }
 }
@@ -117,4 +124,5 @@ export default {
       }
     }
   }
-}</style>
+}
+</style>

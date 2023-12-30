@@ -1,5 +1,5 @@
 
-import {createRouter, createWebHistory} from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import main from '../views/MainViews';
 import home from '../views/HomeViews';
 import all from '../views/AllViews';
@@ -17,13 +17,21 @@ const Router = createRouter({
             component: main,
             redirect: 'home',
             children: [
-                {path: '/home', component: home},
-                {path:'/all',component:all},
-                {path:'/search',component:search},
-                {path:'/play',component:play},
+                { path: '/home', component: home },
+                { path: '/all', component: all },
+                { path: '/search', component: search },
+                { path: '/play', component: play },
             ],
         }
     ]
 });
 
+//离开播放view后重置播放集数
+Router.beforeEach((to, from, next) => {
+    console.log('当前地址为',window.location.pathname);
+    if (to.path !== '/play' && window.location.pathname === '/play') {
+        localStorage.setItem('playChapter', '第1集');
+    }
+    next();
+});
 export default Router;

@@ -1,22 +1,254 @@
 <template>
   <div class="player">
-    <span style="color:white">这里是播放界面哦</span>
+    <div class="top">
+      <!-- video -->
+      <div class="video">
+        <!--  -->
+        <iframe :src="playing" scrolling="0" frameborder="0" width="100%" height="100%" allowfullscreen="allowfullscreen"
+          mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen"
+          oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
+        </iframe>
+      </div>
+      <!-- 相关集数与搜索框 -->
+      <div class="group">
+        <div class="searchInput">
+          <inputSearch :inintWidth="'width:80%'"></inputSearch>
+        </div>
+        <!-- 集数 -->
+        <div class="collection">
+          <el-button v-for="v in group" :key="v" class="chapter" @click="selectPlay(v)"
+            :class="{ 'selected': v == playChapter }">
+            {{ v }}
+          </el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 视频相关信息 -->
+    <div class="information">
+      <div class="pic">
+        <img :src="videoData.vpic" alt="封面" v-if="videoData.vpic.length > 0">
+        <img src="../assets/load.jpg" v-else-if="videoData.vpic.length == 0 || videoData.vpic == null" alt="封面">
+      </div>
+      <!-- 番剧详情 -->
+      <div class="content">
+        <p>{{ videoData.vname }}</p>
+        <p><span style="color:rgb(128,128,128)">上映时间：</span>{{ videoData.vpublishyear }}</p>
+        <p><span style="color:rgb(128,128,128)">地区：</span>{{ videoData.vpublisharea }}</p>
+        <p><span style="color:rgb(128,128,128)">更新时间：</span>{{ videoData.vaddtime }}</p>
+        <p id="videoContent"><span style="color:rgb(128,128,128)">介绍：</span>{{ videoContent }}</p>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import { reactive, ref, onMounted } from 'vue';
+import axios from 'axios';
+import inputSearch from '@/components/inputSearch.vue';
+
 export default {
-    name:'PlayViews',
-    setup(){
+  name: 'PlayViews',
+  components: { inputSearch },
+  setup() {
+    var videoData = reactive({        //接收视频信息
+      vid: 0,//作品编号
+      vname: '',//作品名称
+      vstate: 0,//作品状态（集数）
+      vpic: '',//作品封面
+      vactor: '',//声优
+      vpublishyear: 0,//上映时间（年份）
+      vpublisharea: '',//上映地区（制作国）
+      vaddtime: '',//添加时间（时间戳）
+      vnote: '',//更新状态
+      vletter: '',//作品开头字母
+      vdirector: '',//制作人
+      vlang: '',//语种（作品语类）
+    });
+    const videoContent = ref('');   //视频详细介绍信息
+    var playData = [];    //视频播放数据
+    var group = [];    //视频集数
+    const vid = ref(localStorage.getItem('playId'));    //视频的号
+    const playing = ref(0);       //正在播放的链接
+    if (!localStorage.getItem('playChapter'))
+      localStorage.setItem('playChapter', '第1集');     //初始化播放集数   
+    var playChapter = ref(localStorage.getItem('playChapter'));   //正在播放的集数
+    console.log("localStorage", playChapter.value);
+
+    onMounted(() => {
+
+
+      //获取视频信息数据
+      axios.get("http://localhost:8080/selectVideoById", {
+        params: {
+          vid: vid.value
+        }
+      }).then((response) => {
+        if (response.data != null) {
+          Object.assign(videoData, response.data);
+          videoData.vaddtime = timeUtis(videoData.vaddtime);
+        }
+      });
+      //获取视频详细介绍数据
+      axios.get("http://localhost:8080/selectContent", {
+        params: {
+          vid: vid.value
+        }
+      }, setTimeout(5000)).then((response) => {
+        if (response.data != null) {
+          // 替换 HTML 实体和去除标签
+          var decodedString = response.data.replace(/&lt;\/?p&gt;|&lt;br\/&gt;/g, '')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, ' ')
+            .replace(/&amp;nbsp;/g, ' ');
+
+          // 去除行首和行尾的空格，合并多余的空格
+          decodedString = decodedString.trim().replace(/\s+/g, ' ');
+          videoContent.value = decodedString.trim();
+        }
+      });
+      //获取视频的播放数据 以及整合集数数据
+      axios.get("http://localhost:8080/selectPlay", {
+        params: {
+          vid: vid.value
+        }
+      }, setTimeout(5000)).then((response) => {
+        if (response.data != null) {
+          playData.length = 0;
+          playData = response.data;
+          let i = response.data;
+
+          for (let j = 1; j <= i.length; j++)
+            group.push('第' + j + '集');
+          selectPlay(playChapter.value);
+        }
+      })
+
+    })
+    // 选择播放集数
+    function selectPlay(v) {
+      console.log(v);
+      localStorage.setItem('playChapter',v);       //将当前观看的结果保存在cookie中
+      let index = group.indexOf(v)
+      playChapter.value = v;
+      //对播放内容进行判定
+      var str = playData[index];
+      console.log("末尾判定", str.slice(-5));
+      if (str.slice(-5) == '.m3u8')
+        playing.value = "https://lziplayer.com/?url=" + playData[index];
+      else
+        playing.value = playData[index];
+      console.log(playing.value, "当前播放数据");
+    }
+    //格式化时间戳
+    function timeUtis(time) {
+      // 创建一个 Date 对象
+      let date = new Date(time * 1000); // 乘以1000将秒转换为毫秒
+      // 获取年、月、日
+      let year = date.getFullYear();
+      let month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+      let day = String(date.getDate()).padStart(2, '0');
+      let formattedDate = year + '-' + month + '-' + day;
+      // 格式化日期字符串
+      return formattedDate;
+    }
+
+
+    return {
+
+      videoData, videoContent, playData, group, playing, playChapter,
+      selectPlay,
 
     }
+  }
 }
 </script>
 
 <style scoped lang="less">
-  .player{
-    width: 90%;
-    background: rgba(00, 00, 00, 0.7);
-    margin: 0 auto;
+.player {
+  width: 90%;
+  background: rgb(00, 00, 00, );
+  margin: 0 auto;
+
+  .top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24rem;
+
+    .video {
+      width: 50%;
+      height: 20rem;
+    }
+
+    /*播放器*/
+    .playVideo {
+      width: 50%;
+      height: 50%;
+
+    }
+
+    /*搜索框和集数*/
+    .group {
+      width: 30%;
+      height: 20rem;
+      margin-left: 5rem;
+      text-align: center;
+
+      .collection {
+        border: 0.3rem solid rgb(40, 13, 19), ;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+
+        color: white;
+        height: 15rem;
+        overflow: auto;
+
+        /**超出高度后用滑轮显示*/
+        .chapter {
+          padding: 0.3rem;
+          width: 4rem;
+          cursor: pointer;
+          background-color: #000;
+          border: none;
+          margin: 0.5rem 0;
+        }
+
+        .selected {
+          color: blue;
+        }
+
+      }
+    }
   }
+
+  .information {
+    width: 100%;
+    border: 0.2rem solid white;
+    color: white;
+    display: flex;
+    justify-items: center;
+
+    .pic {
+      width: 10rem;
+
+      img {
+        width: 10rem;
+      }
+    }
+
+    .content {
+      margin-left: 1rem;
+
+      #videoContent {
+        height: 5rem;
+        overflow: auto;
+      }
+    }
+  }
+
+}
 </style>

@@ -76,7 +76,7 @@ export default {
         let day = new Date();
         
         const inintWeek=reactive(["星期一","星期二","星期三","星期四","星期五","星期六","星期日"]);
-        const activeName = ref(inintWeek[day.getDay()]);             //默认展示今天的番剧
+        const activeName = ref(inintWeek[day.getDay()-1]);             //默认展示今天的番剧
 
         const router = inject('router'); // 注入全局的路由实例
         function initObject() {
