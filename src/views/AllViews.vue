@@ -46,7 +46,7 @@
         {{ page.pageNum }}/{{ page.pageTotal }}
       </div>
       <button class="button" @click="pageTo(1)">下一页</button>
-      <el-input v-model.number="selectPage" style="width:2.8rem;margin-left:1rem"></el-input>
+      <el-input v-model.number="selectPage"  class="toInput"></el-input>
       <button class="button" @click="pageTo(2)">GO</button>
 
     </div>
@@ -261,6 +261,9 @@ export default {
       /*定义鼠标样式*/
     }
   }
+  .el-form-item{
+    margin-bottom: 0;
+  }
 
   .video_content {
     display: flex;
@@ -297,9 +300,25 @@ export default {
       padding: 0.4rem 0.5rem;
 
     }
+    .toInput{
+      width:2.8rem;
+      margin-left:1rem
+    }
 
     .pageNum {
       padding: 0 1rem;
+    }
+    @media (max-width:500px) {
+      .button{
+        font-size: 1rem;
+      }
+      .toInput{
+        width: 3rem;
+        height: 3rem;
+        margin-left: 1rem;
+        margin-right: 2rem;
+      }
+      
     }
 
   }

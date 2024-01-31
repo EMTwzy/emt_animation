@@ -16,7 +16,7 @@ export default {
   props:{
     inintWidth:{
       type:String,
-      default:'width:30%',
+      default:'width:30%;font-size:1rem',
     }
   },
   setup() {
@@ -52,6 +52,7 @@ export default {
   padding: 1rem;
   height: 5rem;
   opacity: 0.8;
+  font-size: 1rem;
 
 }
 </style>

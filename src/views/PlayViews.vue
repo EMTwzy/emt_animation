@@ -12,7 +12,7 @@
       <!-- 相关集数与搜索框 -->
       <div class="group">
         <div class="searchInput">
-          <inputSearch :inintWidth="'width:80%'"></inputSearch>
+          <inputSearch :inintWidth="'width:80%;font-size:1rem'"></inputSearch>
         </div>
         <!-- 集数 -->
         <div class="collection">
@@ -72,13 +72,11 @@ export default {
     const vid = ref(localStorage.getItem('playId'));    //视频的号
     const playing = ref(0);       //正在播放的链接
     if (!localStorage.getItem('playChapter'))
-      localStorage.setItem('playChapter', '第1集');     //初始化播放集数   
+      localStorage.setItem('playChapter', "");     //初始化播放集数   
     var playChapter = ref(localStorage.getItem('playChapter'));   //正在播放的集数
     console.log("localStorage", playChapter.value);
 
     onMounted(() => {
-
-
       //获取视频信息数据
       axios.get("http://localhost:8080/selectVideoById", {
         params: {
@@ -108,39 +106,71 @@ export default {
           videoContent.value = decodedString.trim();
         }
       });
-      //获取视频的播放数据 以及整合集数数据
-      axios.get("http://localhost:8080/selectPlay", {
+      getplay();
+
+    })
+
+
+    // 选择播放集数
+    function selectPlay(v) {
+      if (v !== '' && typeof v !== 'undefined') {
+        console.log(v);
+        localStorage.setItem('playChapter', v);       //将当前观看的结果保存在cookie中
+        let index = group.indexOf(v);
+        console.log("str", group);
+        playChapter.value = v;
+        //对播放内容进行判定
+        var str = playData[index];
+        if (str == null)
+          alert("出现错误了！");
+        console.log("末尾判定", str.slice(-5));
+        if (str.slice(-5) == '.m3u8')
+          playing.value = "https://lziplayer.com/?url=" + playData[index];
+        else
+          playing.value = playData[index];
+        console.log(playing.value, "当前播放数据");
+      }
+    }
+
+    //获取播放数据与集数
+    async function getplay(){
+      try{
+        //获取视频的集数
+      await axios.get("http://localhost:8080/getScore", {
         params: {
           vid: vid.value
         }
-      }, setTimeout(5000)).then((response) => {
-        if (response.data != null) {
+      }).then((response) => {
+        console.log("集数 response", response.data)
+        if (response.data != null && response.data.length > 0) {
+          response.data.forEach(element => {
+            group.push(element);
+          });
+          console.log("集数", group)
+        }
+      });
+      //获取视频的播放数据
+      await axios.get("http://localhost:8080/getPlay", {
+        params: {
+          vid: vid.value
+        }
+      }).then((response) => {
+        if (response.data != null && response.data.length > 0) {
           playData.length = 0;
           playData = response.data;
-          let i = response.data;
-
-          for (let j = 1; j <= i.length; j++)
-            group.push('第' + j + '集');
+          console.log("播放response", response.data);
+          console.log("播放", playData);
+          if(playChapter.value=='')
+          selectPlay(group[0]);
+          else
           selectPlay(playChapter.value);
         }
-      })
-
-    })
-    // 选择播放集数
-    function selectPlay(v) {
-      console.log(v);
-      localStorage.setItem('playChapter',v);       //将当前观看的结果保存在cookie中
-      let index = group.indexOf(v)
-      playChapter.value = v;
-      //对播放内容进行判定
-      var str = playData[index];
-      console.log("末尾判定", str.slice(-5));
-      if (str.slice(-5) == '.m3u8')
-        playing.value = "https://lziplayer.com/?url=" + playData[index];
-      else
-        playing.value = playData[index];
-      console.log(playing.value, "当前播放数据");
+      });
+      }catch(error){
+        console.error("获取数据时出错:", error);  
+      }
     }
+
     //格式化时间戳
     function timeUtis(time) {
       // 创建一个 Date 对象
@@ -197,11 +227,10 @@ export default {
       text-align: center;
 
       .collection {
-        border: 0.3rem solid rgb(40, 13, 19), ;
+        border: 0.3rem solid #989393;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        align-items: center;
 
         color: white;
         height: 15rem;
@@ -210,11 +239,13 @@ export default {
         /**超出高度后用滑轮显示*/
         .chapter {
           padding: 0.3rem;
+          height: 1rem;
           width: 4rem;
           cursor: pointer;
           background-color: #000;
           border: none;
           margin: 0.5rem 0;
+          font-size: 1rem;
         }
 
         .selected {

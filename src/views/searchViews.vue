@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { useStore } from 'vuex';
+
 import { onMounted, reactive, ref ,inject} from 'vue';
 import axios from 'axios';
 import inputSearch from '@/components/inputSearch.vue';
@@ -28,7 +28,7 @@ export default {
   name: 'searchViews',
   components: { inputSearch },
   setup() {
-    const store = useStore();
+
     const router=inject('router');
     const input = ref(JSON.parse(sessionStorage.getItem('input')));          //输入框传来的数据
 

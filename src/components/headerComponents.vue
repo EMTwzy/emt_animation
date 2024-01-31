@@ -1,15 +1,22 @@
 <template>
     <div class="header">
         <!-- 莉亚 -->
-        <img src="../assets/emilia.png" id="emilia">
+        <el-tooltip class="item" effect="dark" content="emilia~" placement="right-end">
+            <img src="../assets/emilia.png" id="emilia">
+        </el-tooltip>
         <!-- 网站主题 -->
         
+        <el-tooltip class="item" effect="dark" content="主页" placement="right-end">
             <h3>
                 <router-link to="/home" style="text-decoration:none">EMT</router-link>
             </h3>
+        </el-tooltip>
         
         <!-- 个人 -->
-        <img src="../assets/default_user.jpeg" alt="user" id="user">
+        <el-tooltip class="item" effect="dark" content="个人模块，待开发中" placement="bottom">
+            <img src="../assets/default_user.jpeg" alt="user" id="user">
+        </el-tooltip>
+        
     </div>
 </template>
 
@@ -32,6 +39,7 @@ export default {
     flex: auto;
     justify-items: center;
     align-items: center;
+    width: 100%;
     #emilia{
         width: 16rem;
         height: 22rem;

@@ -30,7 +30,7 @@ const Router = createRouter({
 Router.beforeEach((to, from, next) => {
     console.log('当前地址为',window.location.pathname);
     if (to.path !== '/play' && window.location.pathname === '/play') {
-        localStorage.setItem('playChapter', '第1集');
+        localStorage.setItem('playChapter', "");
     }
     next();
 });
