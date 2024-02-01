@@ -1,5 +1,6 @@
 <template>
   <div class="all">
+    <!-- tag区 -->
     <div class="tags">
       <el-form-item label="按年份查找">
         <a @click="search_tags(v)" v-for="v in time" :key="v" class="year" :class="{ 'selected': v == selected_year }">
@@ -24,11 +25,11 @@
       </el-form-item>
     </div>
     <!-- 查询 -->
-    <div style="text-align:right">
-      <!-- <el-input v-model="input" placeholder="找一部好番看看吧~" class="search" ></el-input> -->
-      <inputSearch></inputSearch>
+    <div style="text-align:right;width:100%">
+      <inputSearch :inintWidth="inputSearch"></inputSearch>
     </div>
 
+    <!-- 动漫数据 -->
     <div class="video_content">
       <div class="video_item" v-for="v in videoData" :key="v.vid">
         <div class="pic">
@@ -40,6 +41,7 @@
       </div>
     </div>
 
+    <!-- 页码 -->
     <div class="page">
       <button class="button" @click="pageTo(0)">上一页</button>
       <div class="pageNum">
@@ -76,7 +78,7 @@ export default {
     const letter = ref([        //初始化作品开头字母数据
       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ]);
-    const input = ref('');      //获取输入框数据
+
     const selectPage = ref('');   //获取指定跳转页码
     const selected_year = ref('');   //被选年
     const selected_addr = ref('');   //被选地址
@@ -106,6 +108,13 @@ export default {
       vdirector: '',//制作人
       vlang: '',//语种（作品语类）
     }]);
+
+    let userAgent=navigator.userAgent;    //获取当前访问用户的客户端信息
+    let inputSearch=ref(0);
+    if(userAgent.indexOf('Mobile')!==-1)
+    inputSearch.value="width:40%;font-size:1rem";
+    else
+        inputSearch.value="width:30%;font-size:1rem";
 
     onMounted(() => {
       getTotal();
@@ -230,7 +239,7 @@ export default {
 
     return {
       search_tags, getTotal, pageTo, toPlay,
-      time, addr, lang, page, letter, input,
+      time, addr, lang, page, letter, inputSearch,
       selected_year, selected_addr, selected_lang, selected_letter, selectPage,
       videoData,
     }
@@ -249,6 +258,9 @@ export default {
     color: white;
     margin-left: 2rem;
     margin-top: 2rem;
+    .el-form-item{
+      padding-top: 2rem;
+    }
 
     .selected {
       color: red;
@@ -265,6 +277,7 @@ export default {
     margin-bottom: 0;
   }
 
+  /**视频数据区*/
   .video_content {
     display: flex;
     flex-wrap: wrap;
@@ -289,6 +302,7 @@ export default {
     }
   }
 
+  /**页码*/
   .page {
     display: flex;
     align-items: center;
@@ -308,20 +322,23 @@ export default {
     .pageNum {
       padding: 0 1rem;
     }
-    @media (max-width:500px) {
-      .button{
-        font-size: 1rem;
-      }
-      .toInput{
-        width: 3rem;
-        height: 3rem;
-        margin-left: 1rem;
-        margin-right: 2rem;
-      }
-      
-    }
 
   }
 
 }
+@media (max-width:500px) {
+    .all{
+      width: 95%;
+      /**动漫数据*/
+      .video_content{
+        align-items: normal;
+        justify-content: space-around;
+      }
+      /**页码*/
+      .page>.toInput{
+        width: 3.8rem;
+        height: 2.6rem;
+      }
+    }
+  }
 </style>

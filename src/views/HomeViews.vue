@@ -1,19 +1,16 @@
 <template>
     <div class="home">
         <!-- 弹窗 -->
-
-        
-          <el-dialog v-model="centerDialogVisible" title="站长有话说" width="30%" center modal="true" destroy-on-close>
+          <el-dialog v-model="centerDialogVisible" title="站长有话说" center modal="true" destroy-on-close>
             <span style="font-size:1rem">
                 <p>本站仅供学习、娱乐，一切资源来源于网络,视频里的广告内容大家千万不要信啊！</p>
                 <p>本人学艺不精也就只能做到如此地步</p>
                 <p>本站不以盈利为目的，仅是学习娱乐之用（随时可能下线）</p>
             </span>
           </el-dialog> 
-        <!-- 查询 -->
-        <!-- <el-input v-model="input" placeholder="找一部好番看看吧~" class="search"></el-input> -->
+
         <div style="width:100%;text-align:center;font-size:1rem">
-            <inputSearch></inputSearch>
+            <inputSearch :inintWidth="inputSearch"></inputSearch>
         </div>
 
         <!-- 今日更新 -->
@@ -122,6 +119,12 @@ export default {
         const weekVideo = initObject();      //每周更新
         const randomVideo = initObject();    //随机推荐
         const reZero = initObject();         //从零
+        const userAgent=navigator.userAgent;       //获取当前用户访问的客户端类型
+        const inputSearch=ref('');          //定义搜索框的样式
+        if(userAgent.indexOf('Mobile')!==-1)
+        inputSearch.value="width:50%;font-size:1rem";
+        else
+        inputSearch.value="width:30%;font-size:1rem";
 
         // 挂载完成后
         onMounted(() => {
@@ -154,14 +157,7 @@ export default {
                 }
             })
             newDay();
-            today();
         })
-
-
-        //标志今日更新内容
-        function today() {
-
-        }
 
         //是否是今天更新的
         function IfNew(time) {
@@ -194,6 +190,8 @@ export default {
                                 item.vpic = ''
                         })
                     })
+                }else{
+                    weekVideo.length=0;
                 }
             })
         }
@@ -210,12 +208,6 @@ export default {
             router.push('/all');
 
         }
-        const handleError = () => {
-            randomVideo.forEach((item, index) => {
-                // 直接修改数组元素以触发响应
-                randomVideo[index] = { ...item, vpic: "" };
-            });
-        }
 
         //前往播放界面
         function toPlay(id) {
@@ -224,10 +216,9 @@ export default {
         }
 
         return {
-            activeName, inintWeek,centerDialogVisible,
+            activeName, inintWeek,centerDialogVisible,inputSearch,
             randomVideo, reZero, weekVideo,
             more, newDay, selectWeek, toPlay, IfNew,
-            handleError
         }
     }
 
@@ -242,21 +233,10 @@ export default {
     flex-direction: column;
     align-items: center;
     overflow: auto;
-
-    /*搜索框*/
-    .search {
-        width: 30%;
-        height: 3rem;
-        margin-bottom: 3rem;
-        opacity: 0.8;
-    }
-
     /*今日更新*/
     .today {
         width: 80%;
         background: rgba(00, 00, 00, 0.7);
-
-
         h3 {
             color: white;
             margin: 0 auto;
@@ -359,6 +339,34 @@ export default {
             text-align: center;
             padding: 1rem;
         }
+    }
+
+    @media (max-width:500px) {
+        /**通告**/
+        ::v-deep .el-dialog{
+            width: 50%;
+            top:25%;
+            left: 25%;
+            margin: 0;
+        }
+        /**今日更新**/
+        .today{
+            width: 100%;
+        }
+        /*视频信息模块*/
+        .video-item{
+            margin-left: 2rem;
+        }
+        /*随机推荐*/
+        .randomVideo{
+            width: 100%;
+        }
+        /**从零模块**/
+        .reZero{
+            width: 100%;
+        }
+
+        
     }
 
 }</style>

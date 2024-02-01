@@ -24,8 +24,7 @@ export default {
     const router = inject('router'); // 注入全局的路由实例
     const input =ref('');
     
-    
-
+    //查询
     function search() {
       console.log("启动了函数");
       //store.commit('setInput',input);

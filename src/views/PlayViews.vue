@@ -12,7 +12,7 @@
       <!-- 相关集数与搜索框 -->
       <div class="group">
         <div class="searchInput">
-          <inputSearch :inintWidth="'width:80%;font-size:1rem'"></inputSearch>
+          <inputSearch :inintWidth="inputSearch"></inputSearch>
         </div>
         <!-- 集数 -->
         <div class="collection">
@@ -76,6 +76,12 @@ export default {
     var playChapter = ref(localStorage.getItem('playChapter'));   //正在播放的集数
     console.log("localStorage", playChapter.value);
 
+    let userAgent = navigator.userAgent;       //获取当前访客的客户端类别信息
+    const inputSearch = ref('width:80%;font-size:1rem');  //输入框样式
+    if (userAgent.indexOf('Mobile') !== -1) {
+      inputSearch.value = 'width:50%;font-size:1rem';
+    }
+
     onMounted(() => {
       //获取视频信息数据
       axios.get("http://localhost:8080/selectVideoById", {
@@ -110,7 +116,6 @@ export default {
 
     })
 
-
     // 选择播放集数
     function selectPlay(v) {
       if (v !== '' && typeof v !== 'undefined') {
@@ -133,41 +138,41 @@ export default {
     }
 
     //获取播放数据与集数
-    async function getplay(){
-      try{
+    async function getplay() {
+      try {
         //获取视频的集数
-      await axios.get("http://localhost:8080/getScore", {
-        params: {
-          vid: vid.value
-        }
-      }).then((response) => {
-        console.log("集数 response", response.data)
-        if (response.data != null && response.data.length > 0) {
-          response.data.forEach(element => {
-            group.push(element);
-          });
-          console.log("集数", group)
-        }
-      });
-      //获取视频的播放数据
-      await axios.get("http://localhost:8080/getPlay", {
-        params: {
-          vid: vid.value
-        }
-      }).then((response) => {
-        if (response.data != null && response.data.length > 0) {
-          playData.length = 0;
-          playData = response.data;
-          console.log("播放response", response.data);
-          console.log("播放", playData);
-          if(playChapter.value=='')
-          selectPlay(group[0]);
-          else
-          selectPlay(playChapter.value);
-        }
-      });
-      }catch(error){
-        console.error("获取数据时出错:", error);  
+        await axios.get("http://localhost:8080/getScore", {
+          params: {
+            vid: vid.value
+          }
+        }).then((response) => {
+          console.log("集数 response", response.data)
+          if (response.data != null && response.data.length > 0) {
+            response.data.forEach(element => {
+              group.push(element);
+            });
+            console.log("集数", group)
+          }
+        });
+        //获取视频的播放数据
+        await axios.get("http://localhost:8080/getPlay", {
+          params: {
+            vid: vid.value
+          }
+        }).then((response) => {
+          if (response.data != null && response.data.length > 0) {
+            playData.length = 0;
+            playData = response.data;
+            console.log("播放response", response.data);
+            console.log("播放", playData);
+            if (playChapter.value == '')
+              selectPlay(group[0]);
+            else
+              selectPlay(playChapter.value);
+          }
+        });
+      } catch (error) {
+        console.error("获取数据时出错:", error);
       }
     }
 
@@ -187,7 +192,7 @@ export default {
 
     return {
 
-      videoData, videoContent, playData, group, playing, playChapter,
+      videoData, videoContent, playData, group, playing, playChapter, inputSearch,
       selectPlay,
 
     }
@@ -198,7 +203,7 @@ export default {
 <style scoped lang="less">
 .player {
   width: 90%;
-  background: rgb(00, 00, 00, );
+  background: rgb(00, 00, 00);
   margin: 0 auto;
 
   .top {
@@ -256,6 +261,7 @@ export default {
     }
   }
 
+  /**视频信息**/
   .information {
     width: 100%;
     border: 0.2rem solid white;
@@ -282,4 +288,53 @@ export default {
   }
 
 }
-</style>
+
+@media (max-width:500px) {
+  .player {
+    width: 100%;
+    height: 75vh;
+    background: rgba(00, 00, 00,0.8 );
+    /**内容上层**/
+    .top {
+      display:block;
+      height: auto;
+      padding-top:2rem;
+      .video{
+        width: 90%;
+        margin: 0 auto;
+        border: 0.1rem solid white;
+      }
+      .group {
+        width: 100%;
+        margin-left: 0rem;
+        height: auto;
+        /**输入框框架*/
+        .searchInput {
+          width: 100%;
+        }
+        /**集数**/
+        .collection{
+          width: 70%;
+          margin: 0 auto;
+          display: block;
+          text-align: left;
+          .chapter{
+            height: 5rem;
+            width: 5rem;
+            font-size: 1.2rem;
+            margin-left: 0.1rem;
+          }
+        }
+      }
+    }
+    /**视频详细信息**/
+    .information{
+      font-size: 1.2rem;
+      width: auto;
+      margin-top: 3rem;
+      .pic{
+        display: flex;
+      }
+    }
+  }
+}</style>

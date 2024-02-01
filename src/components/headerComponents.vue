@@ -61,6 +61,20 @@ export default {
         border-radius: 50%;
         margin-left: 25rem;
     }
+    @media (max-width:500px) {
+        #emilia{
+            width: 11rem;
+            height: 15rem;
+            top: 0rem;
+        }
+        h3{
+            margin-left: 0rem;
+        }
+        #user{
+            margin-left: 0rem;
+        }
+        
+    }
 }
 
 </style>

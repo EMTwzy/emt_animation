@@ -2,7 +2,7 @@
   <div class="searchResult">
     <h2>{{ input }}</h2>
     <div class="search" style="text-align:center;width:100%">
-      <inputSearch></inputSearch>
+      <inputSearch :inintWidth="inputSearch"></inputSearch>
     </div>
     <div class="result">
       <div v-for="v in videoData" :key="v.vid" class="video_item">
@@ -31,6 +31,12 @@ export default {
 
     const router=inject('router');
     const input = ref(JSON.parse(sessionStorage.getItem('input')));          //输入框传来的数据
+    let userAgent=navigator.userAgent;    //获取用户客户端类型数据
+    const inputSearch=ref('');      //输入框样式
+    if(userAgent.indexOf('Mobile')!==-1)
+    inputSearch.value='width:50%;font-size:1rem';
+    else
+        inputSearch.value="width:30%;font-size:1rem";
 
     const videoData = reactive([{           //视频数据
       vid: 0,//作品编号
@@ -84,7 +90,7 @@ export default {
     }
 
     return {
-      input,
+      input,inputSearch,
       videoData,
       toPlay
     }
@@ -102,6 +108,7 @@ export default {
 
   h2 {
     text-align: center;
+    padding-top: 1rem;
   }
 
   .result {
@@ -124,5 +131,18 @@ export default {
       }
     }
   }
+}
+@media (max-width:500px) {
+  .searchResult{
+    /**太宽了会导致出现左右滑轮*/
+    width: 91.2%;   
+    height: 80vh;
+    overflow: auto;
+    .video_item{
+      margin-left: 0.8rem;
+    }
+  }
+
+  
 }
 </style>
