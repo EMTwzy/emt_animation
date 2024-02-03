@@ -84,7 +84,7 @@ export default {
 
     onMounted(() => {
       //获取视频信息数据
-      axios.get("http://localhost:8080/selectVideoById", {
+      axios.get("https://localhost:8080/selectVideoById", {
         params: {
           vid: vid.value
         }
@@ -95,7 +95,7 @@ export default {
         }
       });
       //获取视频详细介绍数据
-      axios.get("http://localhost:8080/selectContent", {
+      axios.get("https://localhost:8080/selectContent", {
         params: {
           vid: vid.value
         }
@@ -141,7 +141,7 @@ export default {
     async function getplay() {
       try {
         //获取视频的集数
-        await axios.get("http://localhost:8080/getScore", {
+        await axios.get("https://localhost:8080/getScore", {
           params: {
             vid: vid.value
           }
@@ -155,7 +155,7 @@ export default {
           }
         });
         //获取视频的播放数据
-        await axios.get("http://localhost:8080/getPlay", {
+        await axios.get("https://localhost:8080/getPlay", {
           params: {
             vid: vid.value
           }
@@ -289,11 +289,12 @@ export default {
 
 }
 
-@media (max-width:500px) {
+@media (max-width:600px) {
   .player {
     width: 100%;
-    height: 75vh;
+    height: 85vh;
     background: rgba(00, 00, 00,0.8 );
+    overflow: auto;
     /**内容上层**/
     .top {
       display:block;

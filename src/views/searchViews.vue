@@ -1,7 +1,7 @@
 <template>
   <div class="searchResult">
     <h2>{{ input }}</h2>
-    <div class="search" style="text-align:center;width:100%">
+    <div class="search">
       <inputSearch :inintWidth="inputSearch"></inputSearch>
     </div>
     <div class="result">
@@ -55,7 +55,7 @@ export default {
 
     onMounted(() => {
       if (input.value != '' && input.value != null)
-        axios.get("http://localhost:8080/selectVideoByName", {
+        axios.get("https://localhost:8080/selectVideoByName", {
           params: {
             name: input.value
           }
@@ -68,7 +68,7 @@ export default {
             videoData.push(...response.data);
 
             videoData.forEach((item) => {
-              axios.get("http://localhost:8080/picUtils", {
+              axios.get("https://localhost:8080/picUtils", {
                 params: {
                   vpic: item.vpic
                 }
@@ -105,7 +105,10 @@ export default {
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0 auto;
   color: white;
-
+  .search{
+    text-align:center;
+    width:100%;
+  }
   h2 {
     text-align: center;
     padding-top: 1rem;
@@ -132,14 +135,18 @@ export default {
     }
   }
 }
-@media (max-width:500px) {
+@media (max-width:600px) {
   .searchResult{
     /**太宽了会导致出现左右滑轮*/
     width: 91.2%;   
     height: 80vh;
     overflow: auto;
+    .search{
+      width: 80%;
+      margin: 0 auto;
+    }
     .video_item{
-      margin-left: 0.8rem;
+      margin-left: 2rem;
     }
   }
 

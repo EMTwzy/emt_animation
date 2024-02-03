@@ -129,12 +129,12 @@ export default {
         // 挂载完成后
         onMounted(() => {
             //随机推荐
-            axios.get("http://localhost:8080/randomVideo").then((response) => {
+            axios.get("https://localhost:8080/randomVideo").then((response) => {
                 randomVideo.length = 0; // 清空数组，以便重新填充
 
                 randomVideo.push(...response.data);
                 randomVideo.forEach((item) => {
-                    axios.get("http://localhost:8080/picUtils", {
+                    axios.get("https://localhost:8080/picUtils", {
                         params: {
                             vpic: item.vpic
                         }
@@ -146,7 +146,7 @@ export default {
                 })
             });
             //从零主题
-            axios.get("http://localhost:8080/selectVideoByName", {
+            axios.get("https://localhost:8080/selectVideoByName", {
                 params: {
                     name: '从零开始的异世界生活'
                 }
@@ -172,7 +172,7 @@ export default {
 
         //每周更新榜单
         function newDay() {
-            axios.get("http://localhost:8080/weekNew", {
+            axios.get("https://localhost:8080/weekNew", {
                 params: {
                     day: (inintWeek.indexOf(activeName.value)) + 1
                 }
@@ -181,7 +181,7 @@ export default {
                     weekVideo.length = 0;
                     weekVideo.push(...response.data);
                     weekVideo.forEach((item) => {
-                        axios.get("http://localhost:8080/picUtils", {
+                        axios.get("https://localhost:8080/picUtils", {
                             params: {
                                 vpic: item.vpic
                             }
@@ -341,7 +341,7 @@ export default {
         }
     }
 
-    @media (max-width:500px) {
+    @media (max-width:600px) {
         /**通告**/
         ::v-deep .el-dialog{
             width: 50%;
@@ -355,7 +355,13 @@ export default {
         }
         /*视频信息模块*/
         .video-item{
-            margin-left: 2rem;
+            margin-left: 0.5rem;
+            .pic{
+                img{
+                    width: 7.5rem;
+                    height: 10rem;
+                }
+            }
         }
         /*随机推荐*/
         .randomVideo{

@@ -12,8 +12,8 @@
 
 <script>
 import { onMounted } from 'vue';
-import background from '@/assets/background.png';
-import phone from '@/assets/phone_bk.png';
+import background from '@/assets/background.jpg';
+import phone from '@/assets/phone_bk.jpg';
 
 export default {
   name: 'App',
@@ -41,17 +41,17 @@ export default {
       console.log("当前访问ua类型", userAgent);
       if (userAgent.indexOf('Mobile') !== -1) {
         backgroundImage = phone;
-        document.querySelector("html").style.fontSize = 10 + 'px';   //手机端10px/rem
+        document.querySelector("html").style.fontSize = 9 + 'px';   //手机端10px/rem
       }
       document.getElementById('background').style.backgroundImage = `url(${backgroundImage})`;
 
     })
-    /*window.addEventListener('keydown', function (e) {
+    window.addEventListener('keydown', function (e) {
       if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
         e.preventDefault(); // 阻止默认行为
         alert("本站是开源的，@github.com/EMTwzy");
       }
-    });*/
+    });
 
 
 
@@ -95,13 +95,13 @@ html {
     /* 将背景图放到z轴的最底层，确保不会遮挡其他内容 */
   }
 
-  @media (min-width:500px) {
+  @media (min-width:600px) {
     #background {
       background-position-y: -5rem;
     }
   }
 
-  @media (max-width:500px) {
+  @media (max-width:600px) {
     #background {
       background-attachment: fixed;
       background-position-y: 0rem !important;

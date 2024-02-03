@@ -145,7 +145,7 @@ export default {
       })
       console.log(search_key, page.pageNum);
 
-      axios.get("http://localhost:8080/selectVideo", {
+      axios.get("https://localhost:8080/selectVideo", {
         params: {
           lang: search_key.lang,
           publishyear: search_key.year,
@@ -156,7 +156,7 @@ export default {
       },setTimeout(5000)).then((response) => {
         videoData.length = 0;        //每次获取数据前先清空数组
         videoData.push(...response.data)        //将数据填充进数组内
-        axios.get("http://localhost:8080/selectVideoNum", {
+        axios.get("https://localhost:8080/selectVideoNum", {
           params: {
             lang: search_key.lang,
             publishyear: search_key.year,
@@ -169,7 +169,7 @@ export default {
             page.pageTotal = Math.ceil(response.data / 20);
         })
         videoData.forEach((item) => {
-          axios.get("http://localhost:8080/picUtils", {
+          axios.get("https://localhost:8080/picUtils", {
             params: {
               vpic: item.vpic
             }
@@ -188,7 +188,7 @@ export default {
 
     //获取总页数
     function getTotal() {
-      axios.get("http://localhost:8080/totalVideo").then((response) => {
+      axios.get("https://localhost:8080/totalVideo").then((response) => {
 
         if (response.data != null && response.data != '')
           page.pageTotal = Math.ceil(response.data / 20);

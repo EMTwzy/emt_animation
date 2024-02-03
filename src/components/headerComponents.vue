@@ -14,7 +14,7 @@
         
         <!-- 个人 -->
         <el-tooltip class="item" effect="dark" content="个人模块，待开发中" placement="bottom">
-            <img src="../assets/default_user.jpeg" alt="user" id="user">
+            <img src="../assets/default_user.jpg" alt="user" id="user">
         </el-tooltip>
         
     </div>
@@ -61,14 +61,16 @@ export default {
         border-radius: 50%;
         margin-left: 25rem;
     }
-    @media (max-width:500px) {
+    @media (max-width:600px) {
         #emilia{
             width: 11rem;
             height: 15rem;
             top: 0rem;
         }
         h3{
-            margin-left: 0rem;
+            margin-left: 1rem;
+            font-size: 3rem;
+            
         }
         #user{
             margin-left: 0rem;
