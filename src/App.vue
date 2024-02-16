@@ -41,7 +41,7 @@ export default {
       console.log("当前访问ua类型", userAgent);
       if (userAgent.indexOf('Mobile') !== -1) {
         backgroundImage = phone;
-        document.querySelector("html").style.fontSize = 9 + 'px';   //手机端10px/rem
+        document.querySelector("html").style.fontSize = 9 + 'px';   //手机端9px/rem
       }
       document.getElementById('background').style.backgroundImage = `url(${backgroundImage})`;
 

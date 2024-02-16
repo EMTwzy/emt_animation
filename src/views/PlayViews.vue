@@ -27,15 +27,15 @@
     <!-- 视频相关信息 -->
     <div class="information">
       <div class="pic">
-        <img :src="videoData.vpic" alt="封面" v-if="videoData.vpic.length > 0">
-        <img src="../assets/load.jpg" v-else-if="videoData.vpic.length == 0 || videoData.vpic == null" alt="封面">
+        <img :src="videoData.vodPic" alt="封面" v-if="videoData.vodPic.length > 0">
+        <img src="../assets/load.jpg" v-else-if="videoData.vodPic.length == 0 || videoData.vodPic == null" alt="封面">
       </div>
       <!-- 番剧详情 -->
       <div class="content">
-        <p>{{ videoData.vname }}</p>
-        <p><span style="color:rgb(128,128,128)">上映时间：</span>{{ videoData.vpublishyear }}</p>
-        <p><span style="color:rgb(128,128,128)">地区：</span>{{ videoData.vpublisharea }}</p>
-        <p><span style="color:rgb(128,128,128)">更新时间：</span>{{ videoData.vaddtime }}</p>
+        <p>{{ videoData.vodName }}</p>
+        <p><span style="color:rgb(128,128,128)">上映时间：</span>{{ videoData.vodYear }}</p>
+        <p><span style="color:rgb(128,128,128)">地区：</span>{{ videoData.vodArea }}</p>
+        <p><span style="color:rgb(128,128,128)">更新时间：</span>{{ videoData.vodAddtime }}</p>
         <p id="videoContent"><span style="color:rgb(128,128,128)">介绍：</span>{{ videoContent }}</p>
       </div>
     </div>
@@ -53,18 +53,16 @@ export default {
   components: { inputSearch },
   setup() {
     var videoData = reactive({        //接收视频信息
-      vid: 0,//作品编号
-      vname: '',//作品名称
-      vstate: 0,//作品状态（集数）
-      vpic: '',//作品封面
-      vactor: '',//声优
-      vpublishyear: 0,//上映时间（年份）
-      vpublisharea: '',//上映地区（制作国）
-      vaddtime: '',//添加时间（时间戳）
-      vnote: '',//更新状态
-      vletter: '',//作品开头字母
-      vdirector: '',//制作人
-      vlang: '',//语种（作品语类）
+      vodId: 0,//作品编号
+      vodName: '',//作品名称
+      vodTitle: 0,//作品状态（集数）
+      vodPic: '',//作品封面
+      vodActor: '',//声优
+      vodYear: 0,//上映时间（年份）
+      vodArea: '',//上映地区（制作国）
+      vodAddtime: '',//添加时间（时间戳）
+      vodLetter: '',//作品开头字母
+      vodLanguage: '',//语种（作品语类）
     });
     const videoContent = ref('');   //视频详细介绍信息
     var playData = [];    //视频播放数据
@@ -91,7 +89,7 @@ export default {
       }).then((response) => {
         if (response.data != null) {
           Object.assign(videoData, response.data);
-          videoData.vaddtime = timeUtis(videoData.vaddtime);
+          videoData.vodAddtime = timeUtis(videoData.vodAddtime);
         }
       });
       //获取视频详细介绍数据

@@ -21,7 +21,6 @@ app.use(ElementUI);
 app.provide('store',store);
 
 // 防止路由原地跳转导致出错
-
 const originalPush = routerConfigure.push;
 routerConfigure.push = function push(location) {
     return originalPush.call(this, location).catch(err => err);

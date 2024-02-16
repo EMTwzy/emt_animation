@@ -31,12 +31,12 @@
 
     <!-- 动漫数据 -->
     <div class="video_content">
-      <div class="video_item" v-for="v in videoData" :key="v.vid">
+      <div class="video_item" v-for="v in videoData" :key="v.vodId">
         <div class="pic">
-          <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
-          <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
-          <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
-          <p style="margin:0 auto">{{ v.vnote }}</p>
+          <img :src="v.vodPic" alt="封面" v-if="v.vodPic.length > 0" @click="toPlay(v.vodId)" style="cursor: pointer;">
+          <img src="../assets/load.jpg" v-else-if="v.vodPic.length == 0 || v.vodPic == null" alt="封面" @click="toPlay(v.vodId)">
+          <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vodId)">{{ v.vodName }}</p>
+          <p style="margin:0 auto">{{ v.vodTitle }}</p>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
         {{ page.pageNum }}/{{ page.pageTotal }}
       </div>
       <button class="button" @click="pageTo(1)">下一页</button>
-      <el-input v-model.number="selectPage"  class="toInput"></el-input>
+      <el-input v-model.number="selectPage" class="toInput"></el-input>
       <button class="button" @click="pageTo(2)">GO</button>
 
     </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref,inject } from 'vue';
+import { onMounted, reactive, ref, inject } from 'vue';
 import axios from 'axios';
 import inputSearch from '@/components/inputSearch.vue';
 
@@ -64,7 +64,7 @@ export default {
   name: 'AllViews',
   components: { inputSearch },
   setup() {
-    const router=inject('router');    //进行路由全局注册
+    const router = inject('router');    //进行路由全局注册
     let year = ref(new Date().getFullYear());
     const time = ref([           //初始化年份数据
       year.value, year.value - 1, year.value - 2, year.value - 3, year.value - 4, year.value - 5, year.value - 6, year.value - 7, year.value - 8, "更早以前"
@@ -95,26 +95,24 @@ export default {
       pageTotal: 0,//总页数
     });
     const videoData = reactive([{           //视频数据
-      vid: 0,//作品编号
-      vname: '',//作品名称
-      vstate: 0,//作品状态（集数）
-      vpic: '',//作品封面
-      vactor: '',//声优
-      vpublishyear: 0,//上映时间（年份）
-      vpublisharea: '',//上映地区（制作国）
-      vaddtime: '',//添加时间（时间戳）
-      vnote: '',//更新状态
-      vletter: '',//作品开头字母
-      vdirector: '',//制作人
-      vlang: '',//语种（作品语类）
+      vodId: 0,//作品编号
+      vodName: '',//作品名称
+      vodTitle: 0,//作品状态（集数）
+      vodPic: '',//作品封面
+      vodActor: '',//声优
+      vodYear: 0,//上映时间（年份）
+      vodArea: '',//上映地区（制作国）
+      vodAddtime: '',//添加时间（时间戳）
+      vodLetter: '',//作品开头字母
+      vodLanguage: '',//语种（作品语类）
     }]);
 
-    let userAgent=navigator.userAgent;    //获取当前访问用户的客户端信息
-    let inputSearch=ref(0);
-    if(userAgent.indexOf('Mobile')!==-1)
-    inputSearch.value="width:40%;font-size:1rem";
+    let userAgent = navigator.userAgent;    //获取当前访问用户的客户端信息
+    let inputSearch = ref(0);
+    if (userAgent.indexOf('Mobile') !== -1)
+      inputSearch.value = "width:40%;font-size:1rem";
     else
-        inputSearch.value="width:30%;font-size:1rem";
+      inputSearch.value = "width:30%;font-size:1rem";
 
     onMounted(() => {
       getTotal();
@@ -153,7 +151,7 @@ export default {
           letter: search_key.letter,
           pageNum: page.pageNum
         }
-      },setTimeout(5000)).then((response) => {
+      }, setTimeout(5000)).then((response) => {
         videoData.length = 0;        //每次获取数据前先清空数组
         videoData.push(...response.data)        //将数据填充进数组内
         axios.get("https://localhost:8080/selectVideoNum", {
@@ -163,7 +161,7 @@ export default {
             publisharea: search_key.addr,
             letter: search_key.letter,
           }
-        },setTimeout(5000)).then((response) => {
+        }, setTimeout(5000)).then((response) => {
           console.log(response.data, "88888888888888");
           if (response.data != null)
             page.pageTotal = Math.ceil(response.data / 20);
@@ -171,11 +169,11 @@ export default {
         videoData.forEach((item) => {
           axios.get("https://localhost:8080/picUtils", {
             params: {
-              vpic: item.vpic
+              vpic: item.vodPic
             }
           }).then((response) => {
             if (!response.data)
-              item.vpic = '';
+              item.vodPic = '';
 
           })
         })
@@ -232,8 +230,8 @@ export default {
 
     //前往播放界面
     function toPlay(id) {
-      localStorage.setItem('playId',id);
-            router.push('/play');
+      localStorage.setItem('playId', id);
+      router.push('/play');
     }
 
 
@@ -258,7 +256,8 @@ export default {
     color: white;
     margin-left: 2rem;
     margin-top: 2rem;
-    .el-form-item{
+
+    .el-form-item {
       padding-top: 2rem;
     }
 
@@ -273,7 +272,8 @@ export default {
       /*定义鼠标样式*/
     }
   }
-  .el-form-item{
+
+  .el-form-item {
     margin-bottom: 0;
   }
 
@@ -314,9 +314,10 @@ export default {
       padding: 0.4rem 0.5rem;
 
     }
-    .toInput{
-      width:2.8rem;
-      margin-left:1rem
+
+    .toInput {
+      width: 2.8rem;
+      margin-left: 1rem
     }
 
     .pageNum {
@@ -326,19 +327,21 @@ export default {
   }
 
 }
+
 @media (max-width:500px) {
-    .all{
-      width: 95%;
-      /**动漫数据*/
-      .video_content{
-        align-items: normal;
-        justify-content: space-around;
-      }
-      /**页码*/
-      .page>.toInput{
-        width: 3.8rem;
-        height: 2.6rem;
-      }
+  .all {
+    width: 95%;
+
+    /**动漫数据*/
+    .video_content {
+      align-items: normal;
+      justify-content: space-around;
+    }
+
+    /**页码*/
+    .page>.toInput {
+      width: 3.8rem;
+      height: 2.6rem;
     }
   }
-</style>
+}</style>

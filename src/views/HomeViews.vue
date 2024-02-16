@@ -24,16 +24,16 @@
             </div>
 
             <div class="today_content">
-                <div v-for="v in weekVideo" :key="v.vid" class="video-item">
+                <div v-for="v in weekVideo" :key="v.vodId" class="video-item">
                     <div class="pic">
-                        <el-badge :value="IfNew(v.vaddtime)" class="item">
-                            <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)"
+                        <el-badge :value="IfNew(v.vodAddtime)" class="item">
+                            <img :src="v.vodPic" alt="封面" v-if="v.vodPic.length > 0" @click="toPlay(v.vodId)"
                                 style="cursor: pointer;">
-                            <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面"
-                                @click="toPlay(v.vid)">
+                            <img src="../assets/load.jpg" v-else-if="v.vodPic.length == 0 || v.vodPic == null" alt="封面"
+                                @click="toPlay(v.vodId)">
                         </el-badge>
-                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
-                        <p style="margin:0 auto">{{ v.vnote }}</p>
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vodId)">{{ v.vodName }}</p>
+                        <p style="margin:0 auto">{{ v.vodTitle }}</p>
                     </div>
                 </div>
                 <div class="noNew" v-if="weekVideo.length == 0" style="margin:0 auto">
@@ -52,14 +52,14 @@
             </div>
 
             <div class="random_content">
-                <div v-for="v in randomVideo" :key="v.vid" class="video-item">
+                <div v-for="v in randomVideo" :key="v.vodId" class="video-item">
                     <div class="pic">
-                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)"
+                        <img :src="v.vodPic" alt="封面" v-if="v.vodPic.length > 0" @click="toPlay(v.vodId)"
                             style="cursor: pointer;">
-                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面"
-                            @click="toPlay(v.vid)">
-                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
-                        <p style="margin:0 auto">{{ v.vnote }}</p>
+                        <img src="../assets/load.jpg" v-else-if="v.vodPic.length == 0 || v.vodPic == null" alt="封面"
+                            @click="toPlay(v.vodId)">
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vodId)">{{ v.vodName }}</p>
+                        <p style="margin:0 auto">{{ v.vodTitle }}</p>
                     </div>
                 </div>
             </div>
@@ -68,14 +68,14 @@
         <div class="reZero">
             <h3>Re:从零开始的异世界生活</h3>
             <div class="reThem">
-                <div v-for="v in reZero" :key="v.vid" class="video-item">
+                <div v-for="v in reZero" :key="v.vodId" class="video-item">
                     <div class="pic">
-                        <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)"
+                        <img :src="v.vodPic" alt="封面" v-if="v.vodPic.length > 0" @click="toPlay(v.vodId)"
                             style="cursor: pointer;">
-                        <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面"
-                            @click="toPlay(v.vid)">
-                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
-                        <p style="margin:0 auto">{{ v.vnote }}</p>
+                        <img src="../assets/load.jpg" v-else-if="v.vodPic.length == 0 || v.vodPic == null" alt="封面"
+                            @click="toPlay(v.vodId)">
+                        <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vodId)">{{ v.vodName }}</p>
+                        <p style="margin:0 auto">{{ v.vodTitle }}</p>
                     </div>
                 </div>
             </div>
@@ -93,27 +93,28 @@ export default {
     name: 'homeCompoents',
     components: { inputSearch },
     setup() {
-        let day = new Date();
+        let day = new Date().getDay();//0为星期日，星期六是6
+        if(day==0)
+        day=7;
         const centerDialogVisible=ref(true);
 
         const inintWeek = reactive(["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]);
-        const activeName = ref(inintWeek[day.getDay() - 1]);             //默认展示今天的番剧
+        const activeName = ref(inintWeek[day-1]);             //默认展示今天的番剧
+
 
         const router = inject('router'); // 注入全局的路由实例
         function initObject() {
             return reactive([{
-                vid: 0,//作品编号
-                vname: '',//作品名称
-                vstate: 0,//作品状态（集数）
-                vpic: '',//作品封面
-                vactor: '',//声优
-                vpublishyear: 0,//上映时间（年份）
-                vpublisharea: '',//上映地区（制作国）
-                vaddtime: '',//添加时间（时间戳）
-                vnote: '',//更新状态
-                vletter: '',//作品开头字母
-                vdirector: '',//制作人
-                vlang: '',//语种（作品语类）
+                vodId: 0,//作品编号
+                vodName: '',//作品名称
+                vodTitle: 0,//作品状态（集数）
+                vodPic: '',//作品封面
+                vodActor: '',//声优
+                vodYear: 0,//上映时间（年份）
+                vodArea: '',//上映地区（制作国）
+                vodAddtime: '',//添加时间（时间戳）
+                vodLetter: '',//作品开头字母
+                vodLanguage: '',//语种（作品语类）
             }]);
         }
         const weekVideo = initObject();      //每周更新
@@ -136,12 +137,12 @@ export default {
                 randomVideo.forEach((item) => {
                     axios.get("https://localhost:8080/picUtils", {
                         params: {
-                            vpic: item.vpic
+                            vpic: item.vodPic
                         }
                     }, setTimeout(5000)).then((response) => {
                         console.log("test@@@@", response.data);
                         if (!response.data)
-                            item.vpic = '';
+                            item.vodPic = '';
                     })
                 })
             });
@@ -183,11 +184,11 @@ export default {
                     weekVideo.forEach((item) => {
                         axios.get("https://localhost:8080/picUtils", {
                             params: {
-                                vpic: item.vpic
+                                vpic: item.vodPic
                             }
                         }).then((response) => {
                             if (!response.data)
-                                item.vpic = ''
+                                item.vodPic = ''
                         })
                     })
                 }else{

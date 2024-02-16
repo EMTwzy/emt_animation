@@ -5,12 +5,12 @@
       <inputSearch :inintWidth="inputSearch"></inputSearch>
     </div>
     <div class="result">
-      <div v-for="v in videoData" :key="v.vid" class="video_item">
+      <div v-for="v in videoData" :key="v.vodId" class="video_item">
         <div class="pic">
-          <img :src="v.vpic" alt="封面" v-if="v.vpic.length > 0" @click="toPlay(v.vid)" style="cursor: pointer;">
-          <img src="../assets/load.jpg" v-else-if="v.vpic.length == 0 || v.vpic == null" alt="封面" @click="toPlay(v.vid)">
-          <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vid)">{{ v.vname }}</p>
-          <p style="margin:0 auto">{{ v.vnote }}</p>
+          <img :src="v.vodPic" alt="封面" v-if="v.vodPic.length > 0" @click="toPlay(v.vodId)" style="cursor: pointer;">
+          <img src="../assets/load.jpg" v-else-if="v.vodPic.length == 0 || v.vodPic == null" alt="封面" @click="toPlay(v.vodId)">
+          <p style="width:9rem;margin:0 auto;cursor: pointer;" @click="toPlay(v.vodId)">{{ v.vodName }}</p>
+          <p style="margin:0 auto">{{ v.vodTitle }}</p>
         </div>
       </div>
       <h3 style="text-align:center;margin-top:1rem;color:red;width:100%" v-if="videoData.length > 1">到此为止了</h3>
@@ -39,18 +39,16 @@ export default {
         inputSearch.value="width:30%;font-size:1rem";
 
     const videoData = reactive([{           //视频数据
-      vid: 0,//作品编号
-      vname: '',//作品名称
-      vstate: 0,//作品状态（集数）
-      vpic: '',//作品封面
-      vactor: '',//声优
-      vpublishyear: 0,//上映时间（年份）
-      vpublisharea: '',//上映地区（制作国）
-      vaddtime: '',//添加时间（时间戳）
-      vnote: '',//更新状态
-      vletter: '',//作品开头字母
-      vdirector: '',//制作人
-      vlang: '',//语种（作品语类）
+      vodId: 0,//作品编号
+      vodName: '',//作品名称
+      vodTitle: 0,//作品状态（集数）
+      vodPic: '',//作品封面
+      vodActor: '',//声优
+      vodYear: 0,//上映时间（年份）
+      vodArea: '',//上映地区（制作国）
+      vodAddtime: '',//添加时间（时间戳）
+      vodLetter: '',//作品开头字母
+      vodLanguage: '',//语种（作品语类）
     }]);
 
     onMounted(() => {
@@ -70,11 +68,11 @@ export default {
             videoData.forEach((item) => {
               axios.get("https://localhost:8080/picUtils", {
                 params: {
-                  vpic: item.vpic
+                  vpic: item.vodPic
                 }
               }).then((response) => {
                 if (!response.data)    //如果图片判定为无法访问
-                  item.vpic = '';
+                  item.vodPic = '';
               })
             });
           }
