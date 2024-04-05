@@ -9,12 +9,12 @@
           oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
         </iframe>
       </div>
-      <!-- 相关集数与搜索框 -->
+      <!-- 鐩稿叧闆嗘暟涓庢悳绱㈡ -->
       <div class="group">
         <div class="searchInput">
           <inputSearch :inintWidth="inputSearch"></inputSearch>
         </div>
-        <!-- 集数 -->
+        <!-- 闆嗘暟 -->
         <div class="collection">
           <el-button v-for="v in group" :key="v" class="chapter" @click="selectPlay(v)"
             :class="{ 'selected': v == playChapter }">
@@ -24,19 +24,19 @@
       </div>
     </div>
 
-    <!-- 视频相关信息 -->
+    <!-- 瑙嗛鐩稿叧淇℃伅 -->
     <div class="information">
       <div class="pic">
-        <img :src="videoData.vodPic" alt="封面" v-if="videoData.vodPic.length > 0">
-        <img src="../assets/load.jpg" v-else-if="videoData.vodPic.length == 0 || videoData.vodPic == null" alt="封面">
+        <img :src="videoData.vodPic" alt="灏侀潰" v-if="videoData.vodPic.length > 0">
+        <img src="../assets/load.jpg" v-else-if="videoData.vodPic.length == 0 || videoData.vodPic == null" alt="灏侀潰">
       </div>
-      <!-- 番剧详情 -->
+      <!-- 鐣墽璇︽儏 -->
       <div class="content">
         <p>{{ videoData.vodName }}</p>
-        <p><span style="color:rgb(128,128,128)">上映时间：</span>{{ videoData.vodYear }}</p>
-        <p><span style="color:rgb(128,128,128)">地区：</span>{{ videoData.vodArea }}</p>
-        <p><span style="color:rgb(128,128,128)">更新时间：</span>{{ videoData.vodAddtime }}</p>
-        <p id="videoContent"><span style="color:rgb(128,128,128)">介绍：</span>{{ videoContent }}</p>
+        <p><span style="color:rgb(128,128,128)">涓婃槧鏃堕棿锛�</span>{{ videoData.vodYear }}</p>
+        <p><span style="color:rgb(128,128,128)">鍦板尯锛�</span>{{ videoData.vodArea }}</p>
+        <p><span style="color:rgb(128,128,128)">鏇存柊鏃堕棿锛�</span>{{ videoData.vodAddtime }}</p>
+        <p id="videoContent"><span style="color:rgb(128,128,128)">浠嬬粛锛�</span>{{ videoContent }}</p>
       </div>
     </div>
 
@@ -52,37 +52,37 @@ export default {
   name: 'PlayViews',
   components: { inputSearch },
   setup() {
-    var videoData = reactive({        //接收视频信息
-      vodId: 0,//作品编号
-      vodName: '',//作品名称
-      vodTitle: 0,//作品状态（集数）
-      vodPic: '',//作品封面
-      vodActor: '',//声优
-      vodYear: 0,//上映时间（年份）
-      vodArea: '',//上映地区（制作国）
-      vodAddtime: '',//添加时间（时间戳）
-      vodLetter: '',//作品开头字母
-      vodLanguage: '',//语种（作品语类）
+    var videoData = reactive({        //鎺ユ敹瑙嗛淇℃伅
+      vodId: 0,//浣滃搧缂栧彿
+      vodName: '',//浣滃搧鍚嶇О
+      vodTitle: 0,//浣滃搧鐘舵€侊紙闆嗘暟锛�
+      vodPic: '',//浣滃搧灏侀潰
+      vodActor: '',//澹颁紭
+      vodYear: 0,//涓婃槧鏃堕棿锛堝勾浠斤級
+      vodArea: '',//涓婃槧鍦板尯锛堝埗浣滃浗锛�
+      vodAddtime: '',//娣诲姞鏃堕棿锛堟椂闂存埑锛�
+      vodLetter: '',//浣滃搧寮€澶村瓧姣�
+      vodLanguage: '',//璇锛堜綔鍝佽绫伙級
     });
-    const videoContent = ref('');   //视频详细介绍信息
-    var playData = [];    //视频播放数据
-    var group = [];    //视频集数
-    const vid = ref(localStorage.getItem('playId'));    //视频的号
-    const playing = ref(0);       //正在播放的链接
+    const videoContent = ref('');   //瑙嗛璇︾粏浠嬬粛淇℃伅
+    var playData = [];    //瑙嗛鎾斁鏁版嵁
+    var group = [];    //瑙嗛闆嗘暟
+    const vid = ref(localStorage.getItem('playId'));    //瑙嗛鐨勫彿
+    const playing = ref(0);       //姝ｅ湪鎾斁鐨勯摼鎺�
     if (!localStorage.getItem('playChapter'))
-      localStorage.setItem('playChapter', "");     //初始化播放集数   
-    var playChapter = ref(localStorage.getItem('playChapter'));   //正在播放的集数
+      localStorage.setItem('playChapter', "");     //鍒濆鍖栨挱鏀鹃泦鏁�   
+    var playChapter = ref(localStorage.getItem('playChapter'));   //姝ｅ湪鎾斁鐨勯泦鏁�
     console.log("localStorage", playChapter.value);
 
-    let userAgent = navigator.userAgent;       //获取当前访客的客户端类别信息
-    const inputSearch = ref('width:80%;font-size:1rem');  //输入框样式
+    let userAgent = navigator.userAgent;       //鑾峰彇褰撳墠璁垮鐨勫鎴风绫诲埆淇℃伅
+    const inputSearch = ref('width:80%;font-size:1rem');  //杈撳叆妗嗘牱寮�
     if (userAgent.indexOf('Mobile') !== -1) {
       inputSearch.value = 'width:50%;font-size:1rem';
     }
 
     onMounted(() => {
-      //获取视频信息数据
-      axios.get("https://localhost:8080/selectVideoById", {
+      //鑾峰彇瑙嗛淇℃伅鏁版嵁
+      axios.get("https://www.emtanimation.fun:8080/selectVideoById", {
         params: {
           vid: vid.value
         }
@@ -92,108 +92,114 @@ export default {
           videoData.vodAddtime = timeUtis(videoData.vodAddtime);
         }
       });
-      //获取视频详细介绍数据
-      axios.get("https://localhost:8080/selectContent", {
+      //鑾峰彇瑙嗛璇︾粏浠嬬粛鏁版嵁
+      axios.get("https://www.emtanimation.fun:8080/selectContent", {
         params: {
           vid: vid.value
         }
       }, setTimeout(5000)).then((response) => {
         if (response.data != null) {
-          // 替换 HTML 实体和去除标签
-          var decodedString = response.data.replace(/&lt;\/?p&gt;|&lt;br\/&gt;/g, '')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, ' ')
-            .replace(/&amp;nbsp;/g, ' ');
+          // 鏇挎崲 HTML 瀹炰綋鍜屽幓闄ゆ爣绛�
+          var decodedString = response.data
+            .replace(/&lt;\/?(p|br)&gt;/g, '')  // 鍚屾椂鍖归厤 <p>, </p>, <br>, 鍜� </br>  
+            .replace(/&lt;/g, '')
+            .replace(/&gt;/g, '')
+            .replace(/&amp;nbsp;/g, ' ')
+            // 鏇挎崲 <br> 鏍囩鐨勫彉浣撲负绌哄瓧绗︿覆  
+            .replace(/<br\s*\/?>/gi, '')
+            // 鍘婚櫎 <p> 鍜� </p> 鏍囩  
+            .replace(/<\/?p>/g, '');
+            
 
-          // 去除行首和行尾的空格，合并多余的空格
-          decodedString = decodedString.trim().replace(/\s+/g, ' ');
-          videoContent.value = decodedString.trim();
-        }
+      // 鍘婚櫎琛岄鍜岃灏剧殑绌烘牸锛屽悎骞跺浣欑殑绌烘牸
+      decodedString = decodedString.trim().replace(/\s+/g, ' ');
+      videoContent.value = decodedString.trim();
+    }
       });
-      getplay();
+  getplay();
 
-    })
+})
 
-    // 选择播放集数
-    function selectPlay(v) {
-      if (v !== '' && typeof v !== 'undefined') {
-        console.log(v);
-        localStorage.setItem('playChapter', v);       //将当前观看的结果保存在cookie中
-        let index = group.indexOf(v);
-        console.log("str", group);
-        playChapter.value = v;
-        //对播放内容进行判定
-        var str = playData[index];
-        if (str == null)
-          alert("出现错误了！");
-        console.log("末尾判定", str.slice(-5));
-        if (str.slice(-5) == '.m3u8')
-          playing.value = "https://lziplayer.com/?url=" + playData[index];
+// 閫夋嫨鎾斁闆嗘暟
+function selectPlay(v) {
+  if (v !== '' && typeof v !== 'undefined') {
+    console.log(v);
+    localStorage.setItem('playChapter', v);       //灏嗗綋鍓嶈鐪嬬殑缁撴灉淇濆瓨鍦╟ookie涓�
+    let index = group.indexOf(v);
+    console.log("str", group);
+    playChapter.value = v;
+    //瀵规挱鏀惧唴瀹硅繘琛屽垽瀹�
+    var str = playData[index];
+    if (str == null)
+      alert("鍑虹幇閿欒浜嗭紒");
+    console.log("鏈熬鍒ゅ畾", str.slice(-5));
+    if (str.slice(-5) == '.m3u8')
+      playing.value = "https://lziplayer.com/?url=" + playData[index];
+    else
+      playing.value = playData[index];
+    console.log(playing.value, "褰撳墠鎾斁鏁版嵁");
+  }
+}
+
+//鑾峰彇鎾斁鏁版嵁涓庨泦鏁�
+async function getplay() {
+  try {
+    //鑾峰彇瑙嗛鐨勯泦鏁�
+    await axios.get("https://www.emtanimation.fun:8080/getScore", {
+      params: {
+        vid: vid.value
+      }
+    }).then((response) => {
+      console.log("闆嗘暟 response", response.data)
+      if (response.data != null && response.data.length > 0) {
+        response.data.forEach(element => {
+          group.push(element);
+        });
+        console.log("闆嗘暟", group)
+      }
+    });
+    //鑾峰彇瑙嗛鐨勬挱鏀炬暟鎹�
+    await axios.get("https://www.emtanimation.fun:8080/getPlay", {
+      params: {
+        vid: vid.value
+      }
+    }).then((response) => {
+      if (response.data != null && response.data.length > 0) {
+        playData.length = 0;
+        playData = response.data;
+        console.log("鎾斁response", response.data);
+        console.log("鎾斁", playData);
+        if (playChapter.value == '')
+          selectPlay(group[0]);
         else
-          playing.value = playData[index];
-        console.log(playing.value, "当前播放数据");
+          selectPlay(playChapter.value);
       }
-    }
+    });
+  } catch (error) {
+    console.error("鑾峰彇鏁版嵁鏃跺嚭閿�:", error);
+  }
+}
 
-    //获取播放数据与集数
-    async function getplay() {
-      try {
-        //获取视频的集数
-        await axios.get("https://localhost:8080/getScore", {
-          params: {
-            vid: vid.value
-          }
-        }).then((response) => {
-          console.log("集数 response", response.data)
-          if (response.data != null && response.data.length > 0) {
-            response.data.forEach(element => {
-              group.push(element);
-            });
-            console.log("集数", group)
-          }
-        });
-        //获取视频的播放数据
-        await axios.get("https://localhost:8080/getPlay", {
-          params: {
-            vid: vid.value
-          }
-        }).then((response) => {
-          if (response.data != null && response.data.length > 0) {
-            playData.length = 0;
-            playData = response.data;
-            console.log("播放response", response.data);
-            console.log("播放", playData);
-            if (playChapter.value == '')
-              selectPlay(group[0]);
-            else
-              selectPlay(playChapter.value);
-          }
-        });
-      } catch (error) {
-        console.error("获取数据时出错:", error);
-      }
-    }
-
-    //格式化时间戳
-    function timeUtis(time) {
-      // 创建一个 Date 对象
-      let date = new Date(time * 1000); // 乘以1000将秒转换为毫秒
-      // 获取年、月、日
-      let year = date.getFullYear();
-      let month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
-      let day = String(date.getDate()).padStart(2, '0');
-      let formattedDate = year + '-' + month + '-' + day;
-      // 格式化日期字符串
-      return formattedDate;
-    }
+//鏍煎紡鍖栨椂闂存埑
+function timeUtis(time) {
+  // 鍒涘缓涓€涓� Date 瀵硅薄
+  let date = new Date(time * 1000); // 涔樹互1000灏嗙杞崲涓烘绉�
+  // 鑾峰彇骞淬€佹湀銆佹棩
+  let year = date.getFullYear();
+  let month = String(date.getMonth() + 1).padStart(2, '0'); // 鏈堜唤浠�0寮€濮嬶紝闇€瑕佸姞1
+  let day = String(date.getDate()).padStart(2, '0');
+  let formattedDate = year + '-' + month + '-' + day;
+  // 鏍煎紡鍖栨棩鏈熷瓧绗︿覆
+  return formattedDate;
+}
 
 
-    return {
+return {
 
-      videoData, videoContent, playData, group, playing, playChapter, inputSearch,
-      selectPlay,
+  videoData, videoContent, playData, group, playing, playChapter, inputSearch,
+  selectPlay,
 
-    }
+}
   }
 }
 </script>
@@ -215,14 +221,14 @@ export default {
       height: 20rem;
     }
 
-    /*播放器*/
+    /*鎾斁鍣�*/
     .playVideo {
       width: 50%;
       height: 50%;
 
     }
 
-    /*搜索框和集数*/
+    /*鎼滅储妗嗗拰闆嗘暟*/
     .group {
       width: 30%;
       height: 20rem;
@@ -239,7 +245,7 @@ export default {
         height: 15rem;
         overflow: auto;
 
-        /**超出高度后用滑轮显示*/
+        /**瓒呭嚭楂樺害鍚庣敤婊戣疆鏄剧ず*/
         .chapter {
           padding: 0.3rem;
           height: 1rem;
@@ -259,7 +265,7 @@ export default {
     }
   }
 
-  /**视频信息**/
+  /**瑙嗛淇℃伅**/
   .information {
     width: 100%;
     border: 0.2rem solid white;
@@ -291,33 +297,39 @@ export default {
   .player {
     width: 100%;
     height: 85vh;
-    background: rgba(00, 00, 00,0.8 );
+    background: rgba(00, 00, 00, 0.8);
     overflow: auto;
-    /**内容上层**/
+
+    /**鍐呭涓婂眰**/
     .top {
-      display:block;
+      display: block;
       height: auto;
-      padding-top:2rem;
-      .video{
+      padding-top: 2rem;
+
+      .video {
         width: 90%;
         margin: 0 auto;
         border: 0.1rem solid white;
       }
+
       .group {
         width: 100%;
         margin-left: 0rem;
         height: auto;
-        /**输入框框架*/
+
+        /**杈撳叆妗嗘鏋�*/
         .searchInput {
           width: 100%;
         }
-        /**集数**/
-        .collection{
+
+        /**闆嗘暟**/
+        .collection {
           width: 70%;
           margin: 0 auto;
           display: block;
           text-align: left;
-          .chapter{
+
+          .chapter {
             height: 5rem;
             width: 5rem;
             font-size: 1.2rem;
@@ -326,14 +338,17 @@ export default {
         }
       }
     }
-    /**视频详细信息**/
-    .information{
+
+    /**瑙嗛璇︾粏淇℃伅**/
+    .information {
       font-size: 1.2rem;
       width: auto;
       margin-top: 3rem;
-      .pic{
+
+      .pic {
         display: flex;
       }
     }
   }
-}</style>
+}
+</style>

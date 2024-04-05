@@ -13,8 +13,8 @@
         </el-tooltip>
         
         <!-- 个人 -->
-        <el-tooltip class="item" effect="dark" content="个人模块，待开发中" placement="bottom">
-            <img src="../assets/default_user.jpg" alt="user" id="user">
+        <el-tooltip class="item" effect="dark" content="手机端" placement="bottom">
+            <a href="https://apps.seepine.com/app/533159022497861"><img src="../assets/default_user.jpg" alt="user" id="user"></a>
         </el-tooltip>
         
     </div>
@@ -60,6 +60,12 @@ export default {
         height: 6rem;
         border-radius: 50%;
         margin-left: 25rem;
+    }
+    .item{
+        a{
+            list-style: none;
+            border-bottom: none;
+        }
     }
     @media (max-width:600px) {
         #emilia{

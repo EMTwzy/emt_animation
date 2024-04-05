@@ -53,7 +53,7 @@ export default {
 
     onMounted(() => {
       if (input.value != '' && input.value != null)
-        axios.get("https://localhost:8080/selectVideoByName", {
+        axios.get("https://www.emtanimation.fun:8080/selectVideoByName", {
           params: {
             name: input.value
           }
@@ -66,7 +66,7 @@ export default {
             videoData.push(...response.data);
 
             videoData.forEach((item) => {
-              axios.get("https://localhost:8080/picUtils", {
+              axios.get("https://www.emtanimation.fun:8080/picUtils", {
                 params: {
                   vpic: item.vodPic
                 }
